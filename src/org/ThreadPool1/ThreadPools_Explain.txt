@@ -1,0 +1,7 @@
+thread pools provide a convenient and efficient way to manage concurrent execution in multi-threaded applications,
+leading to better performance, resource utilization, and scalability.
+Thread pools are used for several reasons:
+Resource Management: reduce resources costing
+Concurrency Control: In applications that require concurrent execution of multiple tasks, thread pools help control the number of threads running simultaneously.
+Performance Optimization: improve the performance of applications by reducing the latency associated with thread creation
+Load Balancing:

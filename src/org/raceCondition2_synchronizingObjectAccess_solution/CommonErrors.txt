@@ -1,0 +1,7 @@
+Calling await without Calling signalAll
+Call await without signalAll mean it will turn all threads to deactivated state
+this will make all threads wait forever
+
+Calling signalAll without Locking the Object
+The thread that calls signalAll must own the lock that belongs to the condition object
+Otherwise an IllegalMonitorStateException is thrown

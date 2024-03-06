@@ -1,0 +1,60 @@
+For example a bank account deposit and withdraw money using multi threads.
+But when running these threads many times repeatedly there is a chance that
+operation deposit still not finish but operation withdraw already done and since balance is 0 it can not do withdraw hance deposit done later
+this lead to failure withdraw operation although we already deposit money into our bank account
+///////////////////////////////////
+In order to solve the issue above we can use lock object
+lock object is used to control the threads that want to manipulate a shared resources
+Scenario lock object is added to project:
+
+public class BankAccount{
+    private Lock balanceChangeLock;
+    ....
+    public BankAccount()
+    {
+        balanceChangeLock = new ReentrantLock();
+        ...
+    }
+}
+All code that manipulates the shared resource is surrounded by call to lock and unlock the lock object
+However this sequence of statement has a potential flaw. if the code between the calls
+to lock and unlock throws an exception then the unlock will never be called. This is A SERIOUS PROBLEM
+To overcome this, place the call unlock into a finally clause:
+
+balanceChangeLock.lock();
+try{
+    ///Manipulates the shared resources
+} finally{
+    balanceChangeLock.unlock();
+}
+Example with deposit function:
+public void deposit(double amount){
+    try{
+        System.out.println("Depositing "+ amount);
+        double newBalance = balance + amount;
+        System.out.println(", new balance is "+ newBalance);
+        balance = newBalance;
+    } finally{
+        balanceChangeLock.unlock();
+    }
+}
+/////Avoiding Deadlocks
+Locks can ensured that shared data are in consistent state but locks can lead to another problem
+it can happen that one thread acquires a lock then waits for another thread to some essential work
+If that other thread are waiting to acquire the same lock then neither of two threads can proceed
+This called deadlock of deadly embrace
+To overcome this problem, we can use condition object. Condition object allow a thread to temporarily release a lock,
+so that another thread can proceed and to regain the lock at later time
+Each condition object belongs to a specific lock object
+
+It like in UK telephone booth when a user inside the booth for too long exceed the limits time of the coin allow for example more than 30 minutes
+the booth time for the user will be expired and the booth door will be unlock for other users to enter.
+That called condition to release telephone booth door lock
+
+////wait() and signalAll()
+When a thread call await , it's not simply deactivated in the same way a thread that reach the end of its time slice
+It's in blocked state when call await and will not be activated by the thread scheduler until it unblocked.
+To unblock another thread must execute the signalAll method ON THE SAME CONDITION OBJECT
+The signalAll method unblocks all threads waiting on the condition. Eventually one of them will
+gain access to the lock and it will exit from wait method.
+

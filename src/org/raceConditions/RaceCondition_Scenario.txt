@@ -1,0 +1,4 @@
+For example a bank account deposit and withdraw money using multi threads.
+But when running these threads many times repeatedly there is a chance that
+operation deposit still not finish but operation withdraw already done and since balance is 0 it can not do withdraw hance deposit done later
+this lead to failure withdraw operation although we already deposit money into our bank account
