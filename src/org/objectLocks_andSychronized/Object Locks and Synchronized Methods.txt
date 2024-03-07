@@ -1,0 +1,13 @@
+When a threads call synchronized method on a BankAccount object it own that object's lock until it return from the method
+and thereby unlocks the object. When objects locked by one thread no other thread can enter a synchronize method for that object
+When another thread call to a synchronized method for that object it automatically deactivated and need to wait
+until the first thread has unlocked the object again
+
+/////
+In other words, synchronized reserved word automatically implements lock/try/finally/unlock
+Therefore no need to write lock/try/finally/unlock when using synchronized
+
+But the object lock has a single condition variable that you need to manipulate with the
+wait, notifyAll and notify method
+If you call wait the current thread is added to set of threads that is waiting for condition of object X
+Then the call notifyAll() unblock all threads that are waiting for this
